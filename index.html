@@ -409,7 +409,13 @@
     });
     
     restartBtn.addEventListener('click', () => {
-      startQuiz();
+      // 重置答题状态
+      currentIndex = 0;
+      answers = new Array(questions.length).fill(null);
+      // 回到欢迎页
+      welcomeView.classList.remove('hidden');
+      quizView.classList.add('hidden');
+      resultView.classList.add('hidden');
     });
     
     // 初始化显示欢迎页
