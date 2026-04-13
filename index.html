@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>📐 高数TI · 数学人格测试</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: linear-gradient(145deg, #f3f5fc 0%, #e9ecf5 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      color: #1a1e2b;
+    }
+    .app-card {
+      max-width: 640px;
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: #ffffff;
+      border-radius: 40px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      padding: 32px 24px 36px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      transition: all 0.2s;
+    }
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #0b1120 0%, #2d3b5e 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subhead {
+      font-size: 1rem;
+      color: #54657e;
+      margin-bottom: 24px;
+      border-left: 5px solid #3b82f6;
+      padding-left: 18px;
+      font-weight: 400;
+    }
+    .welcome-desc {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #1e293b;
+      margin: 24px 0 32px;
+      padding: 0 4px;
+    }
+    .btn-start {
+      background: #0f172a;
+      border: none;
+      color: white;
+      padding: 18px 28px;
+      border-radius: 80px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 18px 25px -12px rgba(15,23,42,0.3);
+      transition: 0.15s;
+      border: 1px solid #1e293b;
+    }
+    .btn-start:hover {
+      background: #1e293b;
+      transform: scale(1.01);
+    }
+    /* 进度条等复用样式 */
+    .progress-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #dfe6f0;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #2563eb;
+      border-radius: 20px;
+      transition: width 0.25s;
+    }
+    .question-counter {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1e293b;
+      background: #eef2ff;
+      padding: 5px 16px;
+      border-radius: 40px;
+    }
+    .question-box {
+      min-height: 200px;
+    }
+    .q-text {
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.35;
+      margin-bottom: 28px;
+      color: #0f172a;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .option-btn {
+      background: #fafcff;
+      border: 1.8px solid #e2e8f0;
+      border-radius: 80px;
+      padding: 16px 22px;
+      font-size: 1.05rem;
+      text-align: left;
+      font-weight: 500;
+      color: #1e293b;
+      transition: all 0.15s;
+      cursor: pointer;
+      box-shadow: 0 4px 8px -4px rgba(0,0,0,0.04);
+      width: 100%;
+    }
+    .option-btn:hover {
+      border-color: #3b82f6;
+      background: #f5f9ff;
+    }
+    .option-btn.selected {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: white;
+      box-shadow: 0 12px 18px -8px rgba(37,99,235,0.3);
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 36px;
+      gap: 18px;
+    }
+    .btn {
+      border: none;
+      background: white;
+      padding: 14px 24px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      border: 1.8px solid #d1d9e8;
+      color: #1e293b;
+      flex: 1;
+      text-align: center;
+      transition: 0.15s;
+    }
+    .btn-primary {
+      background: #0f172a;
+      border-color: #0f172a;
+      color: white;
+      box-shadow: 0 14px 20px -10px rgba(15,23,42,0.3);
+    }
+    .btn-primary:hover {
+      background: #1e293b;
+    }
+    .btn:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .result-screen {
+      text-align: center;
+    }
+    .result-badge {
+      font-size: 3.4rem;
+      font-weight: 800;
+      background: #eef2ff;
+      display: inline-block;
+      padding: 16px 40px;
+      border-radius: 120px;
+      margin: 28px 0 18px;
+      color: #0f172a;
+      border: 2px dashed #3b82f6;
+    }
+    .result-desc {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #1e293b;
+      margin-bottom: 28px;
+      padding: 0 12px;
+      text-align: left;
+    }
+    .restart-btn {
+      margin-top: 8px;
+      background: white;
+      color: #0f172a;
+      border: 1.8px solid #b9c7da;
+    }
+    .footer-note {
+      margin-top: 30px;
+      color: #6f7d95;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+<div class="app-card">
+  <!-- 欢迎页视图 -->
+  <div id="welcomeView">
+    <h1 id="welcomeTitle">📐 高数TI</h1>
+    <div class="subhead" id="welcomeSubtitle">高等数学人格测试</div>
+    <div class="welcome-desc" id="welcomeDesc">加载中……</div>
+    <button class="btn-start" id="startBtn">开始求导 →</button>
+    <div class="footer-note">* 仅供娱乐 · 探索你的数学气质</div>
+  </div>
+
+  <!-- 答题页视图 (默认隐藏) -->
+  <div id="quizView" class="hidden">
+    <h1 style="font-size:2rem; margin-bottom:16px;">📐 高数TI</h1>
+    <div class="progress-section">
+      <div class="progress-bar-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="question-counter" id="counterText">1/12</div>
+    </div>
+    <div id="questionContainer" class="question-box"></div>
+    <div class="nav-buttons">
+      <button class="btn" id="prevBtn" disabled>← 上一题</button>
+      <button class="btn btn-primary" id="nextBtn">下一题 →</button>
+    </div>
+  </div>
+
+  <!-- 结果页视图 (默认隐藏) -->
+  <div id="resultView" class="result-screen hidden">
+    <h1 style="font-size:2rem;">🧮 你的高数人格</h1>
+    <div class="result-badge" id="resultCode">∫ f(x)</div>
+    <div class="result-desc" id="resultDetail">正在计算特征值……</div>
+    <button class="btn restart-btn" id="restartBtn">🔄 重新求导</button>
+    <div class="footer-note">* 结果仅供娱乐 · 高数从未如此亲切</div>
+  </div>
+</div>
+
+<!-- 引入数据文件 -->
+<script src="data.js"></script>
+<script>
+  (function(){
+    "use strict";
+    
+    // 从全局获取数据
+    const DATA = window.GAOSHUTI_DATA;
+    if (!DATA) {
+      alert('数据加载失败，请刷新页面');
+      return;
+    }
+    
+    const welcome = DATA.welcome;
+    const questions = DATA.questions;
+    const results = DATA.results;
+    const mapping = DATA.mapping;
+    
+    // DOM 元素
+    const welcomeView = document.getElementById('welcomeView');
+    const quizView = document.getElementById('quizView');
+    const resultView = document.getElementById('resultView');
+    
+    // 填充欢迎页文本
+    document.getElementById('welcomeTitle').innerHTML = welcome.title;
+    document.getElementById('welcomeSubtitle').textContent = welcome.subtitle;
+    document.getElementById('welcomeDesc').textContent = welcome.description;
+    document.getElementById('startBtn').textContent = welcome.startButton;
+    
+    // 答题页元素
+    const questionDiv = document.getElementById('questionContainer');
+    const progressFill = document.getElementById('progressFill');
+    const counterText = document.getElementById('counterText');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const resultCodeSpan = document.getElementById('resultCode');
+    const resultDetailSpan = document.getElementById('resultDetail');
+    
+    // 状态
+    let currentIndex = 0;
+    let answers = new Array(questions.length).fill(null);
+    
+    // 视图切换
+    function showWelcome() {
+      welcomeView.classList.remove('hidden');
+      quizView.classList.add('hidden');
+      resultView.classList.add('hidden');
+    }
+    
+    function startQuiz() {
+      currentIndex = 0;
+      answers = new Array(questions.length).fill(null);
+      welcomeView.classList.add('hidden');
+      quizView.classList.remove('hidden');
+      resultView.classList.add('hidden');
+      renderQuestion(0);
+    }
+    
+    function showResultView() {
+      quizView.classList.add('hidden');
+      resultView.classList.remove('hidden');
+      const profile = computeResult();
+      resultCodeSpan.textContent = profile.code;
+      resultDetailSpan.textContent = profile.desc;
+    }
+    
+    // 计分逻辑 (基于mapping)
+    function computeResult() {
+      const scores = {
+        integral: 0, derivative: 0, limit: 0, series: 0, differential: 0, continuous: 0, divergent: 0
+      };
+      
+      answers.forEach((ans, idx) => {
+        if (ans !== null && mapping[idx] && mapping[idx][ans]) {
+          const trait = mapping[idx][ans];
+          if (scores.hasOwnProperty(trait)) scores[trait]++;
+        }
+      });
+      
+      let maxTrait = 'limit';
+      let maxScore = -1;
+      for (let trait in scores) {
+        if (scores[trait] > maxScore) {
+          maxScore = scores[trait];
+          maxTrait = trait;
+        }
+      }
+      return results[maxTrait] || results.limit;
+    }
+    
+    // 渲染题目
+    function renderQuestion(index) {
+      const q = questions[index];
+      let optsHtml = '';
+      q.options.forEach((opt, optIdx) => {
+        const selected = answers[index] === optIdx;
+        optsHtml += `<button class="option-btn ${selected ? 'selected' : ''}" data-opt-index="${optIdx}">${opt}</button>`;
+      });
+      
+      questionDiv.innerHTML = `
+        <div class="q-text">${index+1}. ${q.text}</div>
+        <div class="options">${optsHtml}</div>
+      `;
+      
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const optIdx = parseInt(btn.dataset.optIndex, 10);
+          selectOption(currentIndex, optIdx);
+        });
+      });
+      
+      const percent = ((index + 1) / questions.length) * 100;
+      progressFill.style.width = percent + '%';
+      counterText.textContent = `${index+1}/${questions.length}`;
+      
+      prevBtn.disabled = (index === 0);
+      if (index === questions.length - 1) {
+        nextBtn.textContent = '🧮 查看高数人格';
+      } else {
+        nextBtn.textContent = '下一题 →';
+      }
+      nextBtn.disabled = answers[index] === null;
+    }
+    
+    function selectOption(qIdx, optIdx) {
+      if (qIdx !== currentIndex) return;
+      answers[qIdx] = optIdx;
+      document.querySelectorAll('.option-btn').forEach((btn, i) => {
+        if (i === optIdx) btn.classList.add('selected');
+        else btn.classList.remove('selected');
+      });
+      nextBtn.disabled = false;
+    }
+    
+    // 事件绑定
+    document.getElementById('startBtn').addEventListener('click', startQuiz);
+    
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion(currentIndex);
+      }
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+      } else {
+        if (answers.every(a => a !== null)) {
+          showResultView();
+        } else {
+          alert('还有题目没选哦～');
+        }
+      }
+    });
+    
+    restartBtn.addEventListener('click', () => {
+      startQuiz();
+    });
+    
+    // 初始化显示欢迎页
+    showWelcome();
+  })();
+</script>
+</body>
+</html>
